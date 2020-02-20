@@ -23,6 +23,7 @@ import (
 	info "github.com/google/cadvisor/info/v1"
 	"github.com/google/cadvisor/utils/sysfs"
 	"github.com/google/cadvisor/utils/sysfs/fakesysfs"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTopology(t *testing.T) {
@@ -175,4 +176,17 @@ func TestGetHugePagesInfo(t *testing.T) {
 	if !reflect.DeepEqual(expected, val) {
 		t.Errorf("Expected HugePagesInfo %+v, got %+v", expected, val)
 	}
+}
+
+func TestMemoryInfo(t *testing.T) {
+	testPath := "./testdata/edac/mc"
+	memory, err := GetMachineMemoryByType(testPath)
+
+	assert.Nil(t, err)
+	assert.Len(t, memory, 2)
+	assert.Equal(t, uint64(789), memory["Unbuffered-DDR4"].Capacity)
+	assert.Equal(t, uint64(579), memory["Non-volatile-RAM"].Capacity)
+	assert.Equal(t, uint(1), memory["Unbuffered-DDR4"].DimmCount)
+	assert.Equal(t, uint(2), memory["Non-volatile-RAM"].DimmCount)
+
 }
