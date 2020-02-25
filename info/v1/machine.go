@@ -167,6 +167,9 @@ type MachineInfo struct {
 	// The amount of memory (in bytes) in this machine
 	MemoryCapacity uint64 `json:"memory_capacity"`
 
+	// Average power budget for NVM devices configured in BIOS.
+	NVMAvgPowerBudget uint `json:"nvm_avg_power_budget"`
+
 	// HugePages on this machine.
 	HugePages []HugePagesInfo `json:"hugepages"`
 
