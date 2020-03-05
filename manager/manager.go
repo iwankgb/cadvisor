@@ -37,6 +37,7 @@ import (
 	info "github.com/google/cadvisor/info/v1"
 	"github.com/google/cadvisor/info/v2"
 	"github.com/google/cadvisor/machine"
+	"github.com/google/cadvisor/perf"
 	"github.com/google/cadvisor/utils/oomparser"
 	"github.com/google/cadvisor/utils/sysfs"
 	"github.com/google/cadvisor/version"
@@ -1120,12 +1121,14 @@ func (self *manager) watchForNewContainers(quit chan error) error {
 			case event := <-self.eventsChannel:
 				switch {
 				case event.EventType == watcher.ContainerAdd:
+					perf.StartMonitoring(event)
 					switch event.WatchSource {
 					default:
 						err = self.createContainer(event.Name, event.WatchSource)
 					}
 				case event.EventType == watcher.ContainerDelete:
 					err = self.destroyContainer(event.Name)
+					perf.StopMonitoring(event)
 				}
 				if err != nil {
 					klog.Warningf("Failed to process watch event %+v: %v", event, err)
