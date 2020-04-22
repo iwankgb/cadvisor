@@ -1,8 +1,15 @@
 {
   "events": [
     ["instructions"],
-    ["instructions_retired"]
+    ["instructions_retired"],
+    ["uncore_imc_4/cas_count_write"]
   ],
+  "uncore_events": {
+    "memory_controller": [
+      ["cas_count_write"],
+      ["cas_count_read"]
+    ]
+  },
   "custom_events": [
     {
       "type": 4,
@@ -10,6 +17,18 @@
         "0x5300c0"
       ],
       "name": "instructions_retired"
+    },
+    {
+      "config": [
+        "0xc04"
+      ],
+      "name": "cas_count_write"
+    },
+    {
+      "config": [
+        "0x304"
+      ],
+      "name": "cas_count_read"
     }
   ]
 }
