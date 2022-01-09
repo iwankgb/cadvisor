@@ -1,6 +1,5 @@
 builds:
-  -
-    goarch:
+  - goarch:
       - amd64
       - arm64
       - arm
@@ -8,7 +7,7 @@ builds:
       - linux
     flags:
       - -tags=netgo
-    main: ./cmd
+    dir: ./cmd/
     goarm:
       - 6
       - 7
@@ -23,5 +22,64 @@ builds:
       - -X github.com/google/cadvisor/version.GoVersion={{.Env.GOLANG_VERSION}}
 archives:
   - format: binary
+    name_template: "{{.ProjectName}}_{{.Os}}_{{.Arch}}"
+    replacements:
+      linux: ""
+      amd64: ""
+dockers:
+  - goos: linux
+    goarch: amd64
+    image_templates:
+      - europe-central2-docker.pkg.dev/ebpf-testing/cadvisor:latest-amd64
+      - europe-central2-docker.pkg.dev/ebpf-testing/cadvisor:{{.Tag}}-amd64
+    build_flag_templates:
+      - --pull
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.title={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Tag}}
+      - --platform=linux/amd64
+    dockerfile: ./deploy/Dockerfile-plain
+#  - goos: linux
+#    goarch: arm64
+#    image_templates:
+#      - europe-central2-docker.pkg.dev/ebpf-testing/cadvisor:latest-arm64
+#      - europe-central2-docker.pkg.dev/ebpf-testing/cadvisor:{{.Tag}}-arm64
+#    build_flag_templates:
+#      - --pull
+#      - --label=org.opencontainers.image.created={{.Date}}
+#      - --label=org.opencontainers.image.title={{.ProjectName}}
+#      - --label=org.opencontainers.image.revision={{.FullCommit}}
+#      - --label=org.opencontainers.image.version={{.Tag}}
+#      - --platform=linux/arm64
+#    dockerfile: ./deploy/Dockerfile-plain
+#  - goos: linux
+#    goarch: arm
+#    goarm: 6
+#    image_templates:
+#      - europe-central2-docker.pkg.dev/ebpf-testing/cadvisor:latest-armv6
+#      - europe-central2-docker.pkg.dev/ebpf-testing/cadvisor:{{.Tag}}-armv6
+#    build_flag_templates:
+#      - --pull
+#      - --label=org.opencontainers.image.created={{.Date}}
+#      - --label=org.opencontainers.image.title={{.ProjectName}}
+#      - --label=org.opencontainers.image.revision={{.FullCommit}}
+#      - --label=org.opencontainers.image.version={{.Tag}}
+#      - --platform=linux/arm/v6
+#    dockerfile: ./deploy/Dockerfile-plain
+#  - goos: linux
+#    goarch: arm
+#    goarm: 7
+#    image_templates:
+#      - europe-central2-docker.pkg.dev/ebpf-testing/cadvisor:latest-armv7
+#      - europe-central2-docker.pkg.dev/ebpf-testing/cadvisor:{{.Tag}}-armv7
+#    build_flag_templates:
+#      - --pull
+#      - --label=org.opencontainers.image.created={{.Date}}
+#      - --label=org.opencontainers.image.title={{.ProjectName}}
+#      - --label=org.opencontainers.image.revision={{.FullCommit}}
+#      - --label=org.opencontainers.image.version={{.Tag}}
+#      - --platform=linux/arm/v7
+#    dockerfile: ./deploy/Dockerfile-plain
 checksum:
   name_template: checksums.txt
