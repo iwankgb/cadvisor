@@ -8,7 +8,7 @@ builds:
       - linux
     flags:
       - -tags=netgo
-    main: ./cmd
+    main: ./cmd/cadvisor.go
     goarm:
       - 6
       - 7
