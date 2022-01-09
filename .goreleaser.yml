@@ -1,13 +1,6 @@
 builds:
-  - env:
-      - CGO_ENABLED=0
-    goos:
+  - goos:
       - linux
-    goarch:
-      - amd64
-      - arm64
-    flags:
-      - -tags=netgo
     ldflags:
       - -X github.com/google/cadvisor/version.Version={{.Tag}}
       - -X github.com/google/cadvisor/version.Revision={{.Commit}}
