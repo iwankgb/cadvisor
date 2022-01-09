@@ -8,7 +8,7 @@ builds:
       - linux
     flags:
       - -tags=netgo
-    main: ./cmd
+    dir: ./cmd/
     goarm:
       - 6
       - 7
@@ -22,6 +22,11 @@ builds:
       - -X github.com/google/cadvisor/version.BuildDate={{.Date}}
       - -X github.com/google/cadvisor/version.GoVersion={{.Env.GOLANG_VERSION}}
 archives:
-  - format: binary
+  -
+    format: binary
+    replacements:
+      linux: ""
+      amd64: ""
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
 checksum:
   name_template: checksums.txt
