@@ -1,4 +1,4 @@
-FROM mirror.gcr.io/library/golang:1.19-alpine3.16 AS build
+FROM registry.hub.docker.com/library/golang:1.20-alpine3.16 AS build
 
 # Install build depdencies for all supported arches
 RUN apk --no-cache add bash build-base cmake device-mapper findutils git \
@@ -40,11 +40,11 @@ ADD . .
 ARG VERSION
 
 # libipmctl only works on x86_64 CPUs.
-RUN export GO_TAGS="--tags=libpfm,netgo"; \
+RUN export GO_TAGS="-tags=libfpm,netgo"; \
     if [ "$(uname --machine)" = "x86_64" ]; then \
           export GO_TAGS="$GO_TAGS,libipmctl"; \
     fi; \
-    GO_FLAGS="$GO_TAGS" ./build/build.sh
+    GO_FLAGS="-tags=$GO_TAGS" ./build/build.sh
 
 FROM mirror.gcr.io/library/alpine:3.16
 MAINTAINER dengnan@google.com vmarmol@google.com vishnuk@google.com jimmidyson@gmail.com stclair@google.com
